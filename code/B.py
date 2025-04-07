@@ -41,10 +41,10 @@ def calculate_x_abs_mean(t0:int,tf: int, num: int, choices: list) -> np.ndarray:
             else:
                 choice = rand.randint(0, 1)
                 position += choices[choice]
-    return x_mean / num
+    return x_mean / num,time_ndarray
 
 
-def plot_x_abs_mean_log(x_mean:np.ndarray):
+def plot_x_abs_mean_log(x_mean:np.ndarray,t:int):
     plt.plot(x_mean)
     plt.xscale('log')
     plt.yscale('log')
@@ -52,22 +52,42 @@ def plot_x_abs_mean_log(x_mean:np.ndarray):
     plt.ylabel(r'log(<|x|>)',fontsize=20)
     plt.title(r'resolution of <|x|>',fontsize=20)
     plt.grid(True)
-    path = r"./figures/B_log.png"
-    plt.savefig(path)
+    path = f"./figures/B_log_t={t}.png"
+    plt.savefig(path, bbox_inches='tight')
     
     plt.show()
 
+def plot_x_abs_mean(x_mean:np.ndarray,t:int):
+    plt.plot(x_mean)
+    plt.xlabel('time',fontsize=20)
+    plt.ylabel('x_mean',fontsize=20)
+    plt.title(r'resolution of <|x|>',fontsize=20)
+    plt.grid(True)
+    path = f"./figures/B_t={t}.png"
+    plt.savefig(path, bbox_inches='tight')
+    plt.show()
+
+def plot_x_abs_mean_log_fit(x_mean:np.ndarray,t:int,time_ndarry:np.ndarray):
+    x_mean = np.log(x_mean)
+    time_ndarry = np.log(time_ndarry)
+    plt.plot(time_ndarry,x_mean,label='data')
+    parmas = np.polyfit(time_ndarry,x_mean,1)
+    slope,intercept = parmas
+    plt.plot(time_ndarry,np.polyval(parmas,time_ndarry),'r',label =f'log<|x|> = {slope}*log(t)+{intercept}')
+    plt.xlabel('log(t)',fontsize=20)
+    plt.ylabel(r'log(<|x|>)',fontsize=20)
+    plt.title(r'resolution of <|x|>',fontsize=20)
+    plt.grid(True)
+    path = f"./figures/B_log_t={t}_fit.png"
+    plt.savefig(path, bbox_inches='tight')
+    plt.show()
+    
 
 if __name__ == '__main__':
     t = 1000
     num = 10000
-    x_mean = calculate_x_abs_mean(0,t,num,choices)
-    # plt.plot(x_mean)
-    # plt.xlabel('time',fontsize=20)
-    # plt.ylabel('x_mean',fontsize=20)
-    # plt.title(r'resolution of <|x|>',fontsize=20)
-    # plt.grid(True)
-    # path = r"./figures/B.png"
-    # plt.savefig(path)
-    # plt.show()
-    plot_x_abs_mean_log(x_mean)
+    x_mean,time_ndarry = calculate_x_abs_mean(0,t,num,choices)
+    # plot_x_abs_mean(x_mean,t)
+    # plot_x_abs_mean_log(x_mean)
+    # print(x_mean[:20])
+    plot_x_abs_mean_log_fit(x_mean,t,time_ndarry)
