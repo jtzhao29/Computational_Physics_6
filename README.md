@@ -27,7 +27,7 @@ $$m\dot{v} + \lambda v  = \xi(t),$$
 
 计算 $\langle v^2 \rangle$：稳态自洽解 -->
 
-由于 $v(t)$ 服从 Ornstein-Uhlenbeck 过程，其稳态解的方差 $\langle v^2 \rangle$ 满足以下关系：
+其稳态解的方差 $\langle v^2 \rangle$ 满足以下关系：
 $$\frac{d\langle v^2\rangle}{dt}=-2\frac\lambda m\langle v^2\rangle+\frac{D^2}{m^2}$$
 
 稳态时左边为零，得：
@@ -82,8 +82,47 @@ $其中\Delta W=\sqrt{\Delta t}\cdot\mathcal{N}(0,1)$在前后保持一致
 ![alt text](figures/A_1.png)
 
 
-### (b). 自己选择区间，改变温度，画出充分弛豫后系统的平均动能$\langle E_k(\infty) \rangle$ 平均势能$\langle V(\infty) \rangle$. 你从这个结果中发现了什么?(1分) hint: 物理量的系综平均和时间平均有什么关系?
-### (c). 将势能改为$V=\frac12x^4$并重复(b)的计算。你发现了什么差异?怎么理解这一差异?(1分)
+### (b). 改变温度，求解平均动能$\langle E_k(t) \rangle$ 和平均势能$\langle V(t) \rangle$的演化
+自己选择区间，改变温度，画出充分弛豫后系统的平均动能$\langle E_k(\infty) \rangle$ 平均势能$\langle V(\infty) \rangle$. 你从这个结果中发现了什么?(1分) hint: 物理量的系综平均和时间平均有什么关系?
+
+为了方便与(a)中的结果进行对比，选择与A相同的初态，并画出系统平均动能$\langle E_k(\infty) \rangle$ 平均势能$\langle V(\infty) \rangle$：
+温度T=0.5；
+![alt text](figures/energy_vs_time_T0.5.png)
+T=1:
+![alt text](figures/energy_vs_time_T1.0.png)
+T=2:
+![alt text](figures/energy_vs_time_T2.0.png)
+T=4:
+![alt text](figures/energy_vs_time_T4.0.png)
+T=8:
+![alt text](figures/energy_vs_time_T8.0.png)
+
+由以上结果可以发现：
+1. 对于不同的温度下，平均动能和平均势能随时间变化趋势大体相同，比如B初态下的动能都是先增大后减小的
+2. 不同温度下、不同初态下的动能和势能最终都会演化到一个稳定的值，且动能和势能的稳定值相同
+3. 动能和势能的稳定值与温度成正比
+
+提取充分弛豫后（时间较长后）动能和势能的平均值，进行验证：
+
+
+
+![alt text](image.png)
+
+上图证明了上述发现。并且可以观察到，平均动能$\langle E_k(t) \rangle$ 和平均势能$\langle V(t) \rangle$的关系为：
+$$\langle E_k(t) \rangle=\langle V(t) \rangle=\frac{T}{2}$$
+
+对不同的温度进行扫描，计算平均动能$\langle E_k(t) \rangle$ 和平均势能$\langle V(t) \rangle$，结果如下：
+![alt text](figures/temperature_scan.png)
+
+式子$\langle E_k(t) \rangle=\langle V(t) \rangle=\frac{T}{2}$得到验证。
+这对应了能均分定理。
+<!-- todo -->
+### (c). 将势能改为$V=\frac12x^4$
+将势能改为$V=\frac12x^4$并重复(b)的计算。你发现了什么差异?怎么理解这一差异?(1分)
+将势能改为$V=\frac12x^4$得到：
+![alt text](figures/temperature_scan_quartic.png)
+<!-- todo -->
+
 
 # B.梳子上的随机行走
 考虑在一个梳子状的晶格上的随机行走：

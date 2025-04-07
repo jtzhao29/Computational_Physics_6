@@ -5,11 +5,10 @@ import matplotlib.pyplot as plt
 # 势能函数与其导数
 # ----------------------------
 def V(q: float) -> float:
-    return 0.5 * q**2
+    return 0.5 * q**4
 
 def dV_dq(q: float) -> float:
-    return q
-
+    return 2*q**3
 # ----------------------------
 # Heun 方法模拟 Langevin 动力学，记录能量演化
 # ----------------------------
@@ -52,13 +51,13 @@ def plot_kinetic_and_potential_energy(E_k_over_time_A, V_over_time_A, E_k_over_t
     plt.title('Evolution of Ensemble-Averaged Kinetic and Potential Energy', fontsize=20)
     plt.legend()
     plt.grid(True)
-    plt.savefig('./figures/A_1.png', bbox_inches='tight')
+    plt.savefig('./figures/A_1_V=0.25X2.png', bbox_inches='tight')
     plt.show()
 
 # ----------------------------
 # 改变温度，计算充分弛豫后的平均能量
 # ----------------------------
-def scan_temperature(T_list: list[float], q0: float = 0.0, v0: float = 0.0):
+def scan_temperature(T_list: list[float], q0: float = 0.0, v0: float = 1.0):
     avg_Ek = []
     avg_V = []
 
@@ -69,7 +68,7 @@ def scan_temperature(T_list: list[float], q0: float = 0.0, v0: float = 0.0):
         kinetic, potential = heun_for_kinetic_and_potential(q0, v0)
 
         # 弛豫后取最后 20% 做时间平均
-        start_idx = int(0.8 * len(kinetic))
+        start_idx = int(0.95 * len(kinetic))
         Ek_inf = np.mean(kinetic[start_idx:])
         V_inf = np.mean(potential[start_idx:])
 
@@ -86,7 +85,7 @@ def scan_temperature(T_list: list[float], q0: float = 0.0, v0: float = 0.0):
     plt.title('Long-Time Average Energy vs Temperature', fontsize=18)
     plt.legend()
     plt.grid(True)
-    plt.savefig('./figures/temperature_scan.png', bbox_inches='tight')
+    plt.savefig('./figures/temperature_scan_V=0.25X2.png', bbox_inches='tight')
     plt.show()
 
 # ----------------------------
@@ -94,7 +93,7 @@ def scan_temperature(T_list: list[float], q0: float = 0.0, v0: float = 0.0):
 # ----------------------------
 if __name__ == "__main__":
     # 参数设置
-    T_total = 10.0
+    T_total = 20.0
     dt = 0.01
     N_steps = int(T_total / dt)
     N_particles = 10000

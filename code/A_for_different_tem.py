@@ -38,20 +38,22 @@ def heun_for_kinetic_and_potential(q0: float, v0: float, D: float, N_particles: 
 
     return kinetic, potential
 
-def plot_energy_vs_time(t: np.ndarray, kinetic: np.ndarray, potential: np.ndarray, temperature: float):
+def plot_energy_vs_time(t: np.ndarray, kinetic_A: np.ndarray, potential_A: np.ndarray,kinetic_B: np.ndarray, potential_B: np.ndarray, temperature: float):
     """
     画出在某一温度下，系统随时间演化的动能和势能
     """
     plt.figure(figsize=(10, 6))
-    plt.plot(t, kinetic, label="Kinetic Energy", color='blue')
-    plt.plot(t, potential, label="Potential Energy", color='red', linestyle='--')
+    plt.plot(t, kinetic_A, label="Kinetic Energy of A", color='blue')
+    plt.plot(t, potential_A, label="Potential Energy of B", color='blue', linestyle='--')
+    plt.plot(t, kinetic_B, label="Kinetic Energy of B", color='red')
+    plt.plot(t, potential_B, label="Potential Energy of B", color='red', linestyle='--')
     plt.xlabel('Time $t$', fontsize=16)
     plt.ylabel('Energy', fontsize=16)
     plt.title(f'Average Energy vs Time at T={temperature}', fontsize=18)
     plt.legend()
     plt.grid(True)
     os.makedirs('./figures', exist_ok=True)
-    plt.savefig(f'./figures/energy_vs_time_T{temperature}.png', bbox_inches='tight')
+    plt.savefig(f'./figures/energy_vs_time_T={temperature}_time={t[-1]}.png', bbox_inches='tight')
     plt.show()
 
 def simulate_temperature(T: float, N_particles: int, N_steps: int, dt: float):
@@ -74,7 +76,7 @@ def simulate_temperature(T: float, N_particles: int, N_steps: int, dt: float):
     print(f"B:T={T:.2f}: <E_k>={stead_k_B:.4f}, <V>={stead_v_B:.4f}")
 
     t = np.linspace(0, N_steps * dt, N_steps + 1)
-    plot_energy_vs_time(t, kinetic_A, potential_A, temperature=T)
+    plot_energy_vs_time(t, kinetic_A, potential_A,kinetic_B,potential_B, temperature=T)
 
 if __name__ == "__main__":
     T_total = 10.0
@@ -83,6 +85,6 @@ if __name__ == "__main__":
     N_particles = 10000
 
     # 多个温度下分别模拟
-    temperatures = [0.5, 1.0, 2.0, 4.0]
+    temperatures = [ 0.5,1.0,2.0,4.0,8.0,16.0]
     for T in temperatures:
         simulate_temperature(T, N_particles, N_steps, dt)

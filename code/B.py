@@ -41,6 +41,7 @@ def calculate_x_abs_mean(t0:int,tf: int, num: int, choices: list) -> np.ndarray:
             else:
                 choice = rand.randint(0, 1)
                 position += choices[choice]
+    x_mean = x_mean[t0:tf]
     return x_mean / num,time_ndarray
 
 
@@ -67,27 +68,55 @@ def plot_x_abs_mean(x_mean:np.ndarray,t:int):
     plt.savefig(path, bbox_inches='tight')
     plt.show()
 
-def plot_x_abs_mean_log_fit(x_mean:np.ndarray,t:int,time_ndarry:np.ndarray):
-    x_mean = np.log(x_mean)
-    time_ndarry = np.log(time_ndarry)
-    plt.plot(time_ndarry,x_mean,label='data')
-    parmas = np.polyfit(time_ndarry,x_mean,1)
-    slope,intercept = parmas
-    plt.plot(time_ndarry,np.polyval(parmas,time_ndarry),'r',label =f'log<|x|> = {slope}*log(t)+{intercept}')
-    plt.xlabel('log(t)',fontsize=20)
-    plt.ylabel(r'log(<|x|>)',fontsize=20)
-    plt.title(r'resolution of <|x|>',fontsize=20)
+# def plot_x_abs_mean_log_fit(x_mean:np.ndarray,t:int,time_ndarry:np.ndarray):
+#     x_mean = np.log(x_mean)
+#     time_ndarry = np.log(time_ndarry)
+#     plt.plot(time_ndarry,x_mean,label='data')
+#     parmas = np.polyfit(time_ndarry,x_mean,1)
+#     slope,intercept = parmas
+#     plt.plot(time_ndarry,np.polyval(parmas,time_ndarry),'r',label =f'log<|x|> = {slope}*log(t)+{intercept}')
+#     plt.xlabel('log(t)',fontsize=20)
+#     plt.ylabel(r'log(<|x|>)',fontsize=20)
+#     plt.title(r'resolution of <|x|>',fontsize=20)
+#     plt.grid(True)
+#     path = f"./figures/B_log_t={t}_fit.png"
+#     plt.savefig(path, bbox_inches='tight')
+#     plt.show()
+    
+
+def plot_x_abs_mean_log_fit(x_mean: np.ndarray, t: int,t0:int, time_ndarray: np.ndarray):
+    # 对 x_mean 和 time_ndarray 取对数
+    log_x_mean = np.log(x_mean)
+    log_time_ndarray = np.log(time_ndarray)
+
+    # 进行线性拟合
+    params = np.polyfit(log_time_ndarray, log_x_mean, 1)
+    slope, intercept = params
+
+    # 绘制数据点和拟合直线
+    plt.figure(figsize=(8, 6))
+    plt.plot(log_time_ndarray, log_x_mean, 'o', label='Data (log-log)', markersize=5)
+    plt.plot(log_time_ndarray, np.polyval(params, log_time_ndarray), 'r-', 
+             label=f'Fit: log(<|x|>) = {slope:.6f} * log(t) + {intercept:.6f}')
+
+    # 设置图形属性
+    plt.xlabel('log(t)', fontsize=20)
+    plt.ylabel(r'log(<|x|>)', fontsize=20)
+    plt.title(r'Log-Log Fit of <|x|> vs t', fontsize=20)
+    plt.legend(fontsize=12)
     plt.grid(True)
-    path = f"./figures/B_log_t={t}_fit.png"
+
+    # 保存图像
+    path = f"./figures/B_log_from_{t0}_to_{t}_fit.png"
     plt.savefig(path, bbox_inches='tight')
     plt.show()
-    
 
 if __name__ == '__main__':
     t = 1000
     num = 10000
-    x_mean,time_ndarry = calculate_x_abs_mean(0,t,num,choices)
+    t0=120
+    x_mean,time_ndarry = calculate_x_abs_mean(t0,t,num,choices)
     # plot_x_abs_mean(x_mean,t)
     # plot_x_abs_mean_log(x_mean)
     # print(x_mean[:20])
-    plot_x_abs_mean_log_fit(x_mean,t,time_ndarry)
+    plot_x_abs_mean_log_fit(x_mean,t,t0,time_ndarry)
